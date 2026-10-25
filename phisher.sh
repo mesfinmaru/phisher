@@ -5,7 +5,7 @@
 # ===============================================================
 
 # CHANGE THIS LINK TO YOUR ACTUAL PRODUCTION SITE
-BASE_URL="https://ttcsec.gt.tc/"
+BASE_URL="https://ttcsec.gt.tc"
 
 # Clean local cache workspace
 rm -f local_log.txt && touch local_log.txt
